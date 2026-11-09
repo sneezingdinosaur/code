@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<int>>mappings;
+
+    int dfs(int i1, int i2, string &text1, string &text2){
+        if(i1 >= text1.size()){return 0;}
+        if(i2 >= text2.size()){return 0;}
+
+        if(mappings[i1][i2]!=-1){
+            return mappings[i1][i2];
+        }
+
+        if(text1[i1] == text2[i2]){
+            mappings[i1][i2] = 1 + dfs(i1+1, i2+1, text1, text2);
+            return mappings[i1][i2];
+        }
+
+        mappings[i1+1][i2] = dfs(i1+1, i2, text1, text2);
+        mappings[i1][i2+1] = dfs(i1, i2+1, text1, text2);
+        return mappings[i1][i2] = max(mappings[i1+1][i2],mappings[i1][i2+1]);
+    }
+
+    int longestCommonSubsequence(string text1, string text2) {
+        mappings.assign(text1.size()+1, vector<int>(text2.size()+1, -1));
+        return dfs(0, 0, text1, text2);
+
+    }
+};
